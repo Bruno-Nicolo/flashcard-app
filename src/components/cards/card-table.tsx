@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Eye, ArrowUp, ArrowDown } from "@phosphor-icons/react";
+import { ArrowUp, ArrowDown } from "@phosphor-icons/react";
 import {
   Table,
   TableBody,
@@ -8,14 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { getDeckById } from "@/data/mock-data";
 import type { Card, SortConfig } from "@/types/types";
@@ -94,110 +87,85 @@ export function CardTable({
     );
   };
 
-  if (cards.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <div className="text-4xl">📭</div>
-        <h3 className="mt-3 text-lg font-medium">No cards found</h3>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Try adjusting your filters or create some cards.
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <TooltipProvider>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[40%]">
-              {onSort ? (
-                <SortableHeader column="title">Title</SortableHeader>
-              ) : (
-                "Title"
-              )}
-            </TableHead>
-            <TableHead>
-              {onSort ? (
-                <SortableHeader column="deck">Deck</SortableHeader>
-              ) : (
-                "Deck"
-              )}
-            </TableHead>
-            <TableHead>
-              {onSort ? (
-                <SortableHeader column="nextDueDate">Due Date</SortableHeader>
-              ) : (
-                "Due Date"
-              )}
-            </TableHead>
-            <TableHead>Last Score</TableHead>
-            <TableHead className="w-12" />
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {cards.map((card) => {
-            const deck = getDeckById(card.deckId);
-            const status = getDueStatus(card.nextDueDate);
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[40%]">
+            {onSort ? (
+              <SortableHeader column="title">Title</SortableHeader>
+            ) : (
+              "Title"
+            )}
+          </TableHead>
+          <TableHead>
+            {onSort ? (
+              <SortableHeader column="deck">Deck</SortableHeader>
+            ) : (
+              "Deck"
+            )}
+          </TableHead>
+          <TableHead>
+            {onSort ? (
+              <SortableHeader column="nextDueDate">Due Date</SortableHeader>
+            ) : (
+              "Due Date"
+            )}
+          </TableHead>
+          <TableHead>Last Score</TableHead>
+          <TableHead className="w-12" />
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {cards.map((card) => {
+          const deck = getDeckById(card.deckId);
+          const status = getDueStatus(card.nextDueDate);
 
-            return (
-              <TableRow key={card.id}>
-                <TableCell className="font-medium">
-                  <span className="line-clamp-1">{card.title}</span>
-                </TableCell>
-                <TableCell>
-                  {deck && (
-                    <Link
-                      to={`/deck/${deck.id}`}
-                      className="text-muted-foreground hover:text-foreground hover:underline"
-                    >
-                      {deck.name}
-                    </Link>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant={status === "overdue" ? "destructive" : "outline"}
-                    className={cn(
-                      status === "overdue" &&
-                        "border-red-500/30 bg-red-500/10 text-red-600",
-                    )}
+          return (
+            <TableRow key={card.id}>
+              <TableCell className="font-medium">
+                <button
+                  type="button"
+                  onClick={() => onPreview?.(card)}
+                  className="line-clamp-1 text-left hover:text-primary hover:underline"
+                >
+                  {card.title}
+                </button>
+              </TableCell>
+              <TableCell>
+                {deck && (
+                  <Link
+                    to={`/deck/${deck.id}`}
+                    className="text-muted-foreground hover:text-foreground hover:underline"
                   >
-                    {formatDate(card.nextDueDate)}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {card.lastScore ? (
-                    <span className="tabular-nums text-muted-foreground">
-                      {card.lastScore}/5
-                    </span>
-                  ) : (
-                    <span className="text-muted-foreground">—</span>
+                    {deck.name}
+                  </Link>
+                )}
+              </TableCell>
+              <TableCell>
+                <Badge
+                  variant={status === "overdue" ? "destructive" : "outline"}
+                  className={cn(
+                    status === "overdue" &&
+                      "border-red-500/30 bg-red-500/10 text-red-600",
                   )}
-                </TableCell>
-                <TableCell>
-                  <Tooltip>
-                    <TooltipTrigger
-                      render={
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => onPreview?.(card)}
-                          aria-label={`Preview ${card.title}`}
-                        >
-                          <Eye className="size-4" />
-                        </Button>
-                      }
-                    />
-                    <TooltipContent>Preview card</TooltipContent>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TooltipProvider>
+                >
+                  {formatDate(card.nextDueDate)}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                {card.lastScore ? (
+                  <span className="tabular-nums text-muted-foreground">
+                    {card.lastScore}/5
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                )}
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 }

@@ -230,7 +230,7 @@ evens = [x for x in range(20) if x % 2 == 0]
 # Nested
 matrix = [[i*j for j in range(3)] for i in range(3)]
 \`\`\``,
-    deckId: "deck-5",
+    deckId: "deck-1",
     nextDueDate: daysFromNow(3),
     lastReviewedDate: daysFromNow(-1),
     lastScore: 5,
@@ -363,4 +363,8 @@ export function getDeckById(deckId: string): Deck | undefined {
 
 export function getCardsCountForDeck(deckId: string): number {
   return mockCards.filter((card) => card.deckId === deckId).length;
+}
+
+export function getSubDecks(parentId: string): Deck[] {
+  return mockDecks.filter((d) => d.parentId === parentId);
 }

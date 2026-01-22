@@ -46,7 +46,12 @@ export function UserFooter() {
             }
           />
           <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuItem onSelect={() => setSettingsOpen(true)}>
+            <DropdownMenuItem
+              onClick={(event) => {
+                event.preventDefault();
+                setSettingsOpen(true);
+              }}
+            >
               <Gear className="mr-2 size-4" />
               Settings
             </DropdownMenuItem>
