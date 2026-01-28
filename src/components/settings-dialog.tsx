@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Moon, Sun, Monitor } from "@phosphor-icons/react";
+import { MoonIcon, SunIcon, MonitorIcon } from "@phosphor-icons/react";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,33 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Settings</DialogTitle>
+          <DialogDescription>
+            Customize your flashcard experience
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-6 py-4">
+          <ThemeSelection />
+
+          {/* Account Section */}
+          <div className="space-y-3">
+            <Label>Account</Label>
+            <p className="text-sm text-muted-foreground">
+              Account settings will be available when the backend is ready.
+            </p>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ThemeSelection() {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== "undefined") {
       return (localStorage.getItem("theme") as Theme) || "system";
@@ -42,54 +69,32 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   }, [theme]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
-          <DialogDescription>
-            Customize your flashcard experience
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-6 py-4">
-          {/* Theme Selection */}
-          <div className="space-y-3">
-            <Label>Appearance</Label>
-            <div className="grid grid-cols-3 gap-2">
-              <ThemeButton
-                theme="light"
-                currentTheme={theme}
-                onClick={() => setTheme("light")}
-                icon={Sun}
-                label="Light"
-              />
-              <ThemeButton
-                theme="dark"
-                currentTheme={theme}
-                onClick={() => setTheme("dark")}
-                icon={Moon}
-                label="Dark"
-              />
-              <ThemeButton
-                theme="system"
-                currentTheme={theme}
-                onClick={() => setTheme("system")}
-                icon={Monitor}
-                label="System"
-              />
-            </div>
-          </div>
-
-          {/* Account Section */}
-          <div className="space-y-3">
-            <Label>Account</Label>
-            <p className="text-sm text-muted-foreground">
-              Account settings will be available when the backend is ready.
-            </p>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <div className="space-y-3">
+      <Label>Appearance</Label>
+      <div className="grid grid-cols-3 gap-2">
+        <ThemeButton
+          theme="light"
+          currentTheme={theme}
+          onClick={() => setTheme("light")}
+          icon={SunIcon}
+          label="Light"
+        />
+        <ThemeButton
+          theme="dark"
+          currentTheme={theme}
+          onClick={() => setTheme("dark")}
+          icon={MoonIcon}
+          label="Dark"
+        />
+        <ThemeButton
+          theme="system"
+          currentTheme={theme}
+          onClick={() => setTheme("system")}
+          icon={MonitorIcon}
+          label="System"
+        />
+      </div>
+    </div>
   );
 }
 

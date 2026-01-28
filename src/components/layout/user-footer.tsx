@@ -56,7 +56,7 @@ export function UserFooter() {
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive">
+            <DropdownMenuItem variant="destructive">
               <SignOut className="mr-2 size-4" />
               Log out
             </DropdownMenuItem>

@@ -8,8 +8,8 @@ export function MainLayout() {
     <div className="flex h-dvh w-full bg-background">
       <SidebarProvider>
         <AppSidebar />
+        <SidebarTrigger className="mx-1" />
         <main className="flex-1 overflow-auto">
-          <SidebarTrigger className="mx-1" />
           <Outlet />
         </main>
       </SidebarProvider>
